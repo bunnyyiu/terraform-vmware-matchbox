@@ -1,0 +1,25 @@
+vsphere_server = "123.123.123.123"
+vsphere_user = "admin_user"
+vsphere_password = "adminpassword"
+vshpere_datastore = "datastore_name"
+vshpere_datacenter = "datacenter_name"
+vsphere_resource_pool = "XXX/YYY"
+vsphere_network = "public_network"
+# import from https://stable.release.core-os.net/amd64-usr/current/coreos_production_vmware_ova.ova
+vsphere_template = "coreos_1632.3.0"
+upsteam_dns = "8.8.8.8"
+dhcp_range = "192.168.100.101,192.168.100.200"
+provisioner_ip = "192.168.100.100"
+hostname = "provisioner"
+provisioner_node_name = "provisioner.dev1.cluster.k8s.local"
+subnet_gateway = "192.168.100.254"
+static_network_dev = "ens192"
+ssh_key_location = "~/.ssh/id_rsa.pub"
+coreos_version = "1632.3.0"
+cloud_init_filename = "cloud-config.cfg"
+matchbox_ca_file = "asserts/ca.crt"
+matchbox_client_cert_file = "asserts/server.crt"
+matchbox_server_cert_key = "asserts/server.key"
+num_cpus = 1
+memory_size_mb = 2
+disk_size_gb = 80
