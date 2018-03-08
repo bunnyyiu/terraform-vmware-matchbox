@@ -1,6 +1,9 @@
 # terraform-vmware-matchbox
 This setup matchbox provisioner and dnsmasq in vmware for k8s bootstrap. The created VM will provide DHCP, TFTP/HTTP, DNS to help bootstrap a k8s cluster from PXE on vmware/bare-metal.
 
+# Prerequisite
+Generate certs and keys in ./asserts for matchbox, please refer to [matchbox document](https://github.com/coreos/matchbox/tree/master/scripts/tls).
+
 # Usage
 ```bash
 git clone https://github.com/bunnyyiu/terraform-vmware-matchbox.git
@@ -37,4 +40,4 @@ add /etc/dnsmasq/hosts/k8s in format "ip domain_name"
 ```
 
 # Config matchbox to bootstrap k8s.
-Please refer to matchbox example
+Please refer to [typhoon example](https://typhoon.psdn.io/bare-metal/).
