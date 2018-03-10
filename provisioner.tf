@@ -1,30 +1,3 @@
-resource "null_resource" "matchbox_keys" {
-  provisioner "local-exec" {
-    command = <<EOF
-docker build --no-cache -t openssl_cert_gen . -f -<<END
-FROM alpine:latest
-
-RUN apk add --no-cache openssl wget bash
-
-ADD https://raw.githubusercontent.com/coreos/matchbox/master/scripts/tls/openssl.conf /openssl.conf
-ADD https://raw.githubusercontent.com/coreos/matchbox/master/scripts/tls/cert-gen /cert-gen
-RUN chmod +x /cert-gen
-
-RUN mkdir -p /output
-
-CMD /cert-gen && cp *.key *.crt /output
-END
-
-mkdir -p asserts
-docker run --rm --env SAN="DNS.1:${var.provisioner_node_name},IP.1:${var.provisioner_ip}" -v $PWD/asserts:/output openssl_cert_gen
-
-rm -rf asserts/openssl.conf asserts/cert-gen asserts/certs asserts/cert-gen \
-    asserts/crl asserts/index.txt asserts/index.txt.attr asserts/newcerts \
-    asserts/serial asserts/server.csr
-EOF
-  }
-}
-
 data "template_file" "provisioner_cloud_config" {
   vars {
     ssh_key = "${file("${var.ssh_key_location}")}"
@@ -86,10 +59,16 @@ coreos:
     - name: systemd-networkd.service
       command: restart
 
-    # set no reboot on update
-    - name: locksmith.service
-      command: stop
-      mask: true
+    - name: disable-locksmithd.service
+      command: start
+      content: |
+        [Unit]
+        Description=Disable locksmithd.service
+        Before=locksmith.service
+
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/systemctl mask --now locksmithd.service
 
     - name: matchbox.service
       command: start
